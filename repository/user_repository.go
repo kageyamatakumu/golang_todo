@@ -42,7 +42,7 @@ func (ur *userRepository) GetUserByEmail(user *model.User, email string) error {
 
 // Userの名前更新
 func (ur *userRepository) ReNameUserName(user *model.User, userId uint) error {
-	result := ur.db.Model(user).Clauses(clause.Returning{}).Where("user_id=?", userId).Update("name", user.Name)
+	result := ur.db.Model(user).Clauses(clause.Returning{}).Where("id=?", userId).Update("name", user.Name)
 
 	if result.Error != nil {
 		return result.Error
