@@ -28,7 +28,11 @@ func NewUserUsecase(ur repository.IUserRepository) IUserUsecase {
 
 // サインアップ → User作成
 func (uu *userUsecase) SignUp(user model.User) (model.UserResponse, error) {
-	newUser := model.User{Email: user.Email, Password: user.Password, Name: user.Name}
+	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+	if err != nil {
+		return model.UserResponse{}, err
+	}
+	newUser := model.User{Email: user.Email, Password: string(hash), Name: user.Name}
 	if err := uu.ur.CreateUser(&newUser); err != nil {
 		return model.UserResponse{}, err
 	}
@@ -48,7 +52,7 @@ func (uu *userUsecase) Login(user model.User) (string, error) {
 	}
 	err := bcrypt.CompareHashAndPassword([]byte(storedUser.Password), []byte(user.Password))
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": storedUser.ID,
@@ -56,9 +60,9 @@ func (uu *userUsecase) Login(user model.User) (string, error) {
 	})
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
 	if err != nil {
-		return "", nil
+		return "", err
 	}
-	return tokenString, nil
+	return tokenString, err
 }
 
 // Userの名前更新
