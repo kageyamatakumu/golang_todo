@@ -78,12 +78,10 @@ func (uc *userController) LogIn(e echo.Context) error {
 	cookie.Expires = time.Now().Add(24 * time.Hour)
 	cookie.Path = "/"
 	cookie.Domain = os.Getenv("API_DOMAIN")
-	// cookie.Secure = true
+	cookie.Secure = true
 	cookie.HttpOnly = true
-	cookie.SameSite = http.SameSiteDefaultMode
-	// cookie.SameSite = http.SameSiteNoneMode
+	cookie.SameSite = http.SameSiteNoneMode
 	e.SetCookie(cookie)
-
 	return e.NoContent(http.StatusOK)
 }
 
@@ -95,7 +93,7 @@ func (uc *userController) LogOut(e echo.Context) error {
 	cookie.Expires = time.Now()
 	cookie.Path = "/"
 	cookie.Domain = os.Getenv("API_DOMAIN")
-	// cookie.Secure = true
+	cookie.Secure = true
 	cookie.HttpOnly = true
 	cookie.SameSite = http.SameSiteDefaultMode
 	// cookie.Sa = http.SameSiteNoneMode
