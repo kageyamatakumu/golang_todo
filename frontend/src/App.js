@@ -10,7 +10,12 @@ import axios from 'axios';
 function App() {
   useEffect(() => {
     axios.defaults.withCredentials = true
-  })
+    const getCsrfToken = async () => {
+      const { data } = await axios.get('http://localhost:8080/csrf')
+      axios.defaults.headers.common['X-CSRF-Token'] = data.csrf_token
+    }
+    getCsrfToken()
+  }, [])
   return (
     <>
     <Routes>
