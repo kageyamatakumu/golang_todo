@@ -17,6 +17,7 @@ type IUserController interface {
 	LogIn(e echo.Context) error
 	LogOut(e echo.Context) error
 	ReName(e echo.Context) error
+	CsrfToken(e echo.Context) error
 }
 
 type userController struct {
@@ -100,5 +101,13 @@ func (uc *userController) LogOut(e echo.Context) error {
 	e.SetCookie(cookie)
 
 	return e.NoContent(http.StatusOK)
+}
+
+// CSRF対策
+func (uc *userController) CsrfToken(e echo.Context) error {
+	token := e.Get("csrf").(string)
+	return e.JSON(http.StatusOK, echo.Map{
+		"csrf_token": token,
+	})
 }
 
