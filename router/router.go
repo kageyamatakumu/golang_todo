@@ -3,6 +3,7 @@ package router
 import (
 	"go-todo-api/controller"
 	"os"
+	"net/http"
 
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
@@ -18,9 +19,17 @@ func NewRouter(uc controller.IUserController, tc controller.ITodoController) *ec
 		AllowMethods:     []string{"GET", "PUT", "POST", "DELETE"},
 		AllowCredentials: true,
 	}))
+	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		CookiePath: "/",
+		CookieDomain: os.Getenv("API_DOMAIN"),
+		CookieHTTPOnly: true,
+		CookieSameSite: http.SameSiteNoneMode,
+	}))
+
 	e.POST("/signup", uc.SignUp)
 	e.POST("/login", uc.LogIn)
 	e.POST("/logout", uc.LogOut)
+	e.GET("/csrf", uc.CsrfToken)
 
 	u := e.Group("/user")
 	u.Use(echojwt.WithConfig(echojwt.Config{
