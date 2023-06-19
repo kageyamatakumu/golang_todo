@@ -1,5 +1,5 @@
 import React from 'react'
-import { AxiosRename } from '../apis/rename'
+import { AxiosRename } from '../apis/user/rename'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 

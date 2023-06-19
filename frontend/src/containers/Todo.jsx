@@ -1,6 +1,7 @@
-import React from 'react'
-import { Axioslogout } from '../apis/logout'
+import React, { useEffect } from 'react'
+import { Axioslogout } from '../apis/user/logout'
 import { useNavigate } from 'react-router-dom'
+import { Axiostodos } from '../apis/todos'
 
 export const Todo = () => {
   const navigate = useNavigate()
@@ -13,6 +14,19 @@ export const Todo = () => {
   const submitToRenamePage = () => {
     navigate('/renamePage')
   }
+
+  useEffect(() => {
+    const data = async () => {
+      try {
+        const result = await Axiostodos();
+        console.log(result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    data();
+  })
+
   return(
     <>
       <div>Todoリスト</div>

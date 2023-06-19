@@ -1,6 +1,6 @@
 import React from 'react'
-import { AxiosAuth } from '../apis/auth';
-import { AxiosSingUP } from '../apis/singup';
+import { AxiosAuth } from '../apis/user/auth';
+import { AxiosSingUP } from '../apis/user/singup';
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
