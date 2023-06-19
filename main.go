@@ -13,6 +13,9 @@ func main() {
 	userRepository := repository.NewUserReposiotry(db)
 	userUsecase := usecase.NewUserUsecase(userRepository)
 	userController := controller.NewUserController(userUsecase)
-	e := router.NewRouter(userController)
+	todoRepository := repository.NewTodoRepository(db)
+	todoUsercase := usecase.NewTodoUsecase(todoRepository)
+	todoController := controller.NewTodoController(todoUsercase)
+	e := router.NewRouter(userController, todoController)
 	e.Logger.Fatal(e.Start(":8080"))
 }
